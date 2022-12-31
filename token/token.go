@@ -3,39 +3,40 @@ package token
 type TokenType int
 
 const (
-	ILLEGAL TokenType = 1
-	EOF     TokenType = 2
+	_ TokenType = iota
+	ILLEGAL
+	EOF
 
-	IDENTIFIER TokenType = 3
-	VAR_TYPE   TokenType = 4
-	INT        TokenType = 5
+	IDENTIFIER
+	VAR_TYPE
+	INT
 
-	ASSIGN   TokenType = 6
-	PLUS     TokenType = 7
-	MINUS    TokenType = 14
-	BANG     TokenType = 15
-	ASTERISK TokenType = 16
-	SLASH    TokenType = 17
+	ASSIGN
+	PLUS
+	MINUS
+	BANG
+	ASTERISK
+	SLASH
 
-	LESS_THAN    TokenType = 18
-	GREATER_THAN TokenType = 19
-	EQUAL_TO     TokenType = 25
-	NOT_EQUAL_TO TokenType = 26
+	LESS_THAN
+	GREATER_THAN
+	EQUAL_TO
+	NOT_EQUAL_TO
 
-	COMMA  TokenType = 8
-	LPAREN TokenType = 9
-	RPAREN TokenType = 10
-	LBRACE TokenType = 11
-	RBRACE TokenType = 12
+	COMMA
+	LPAREN
+	RPAREN
+	LBRACE
+	RBRACE
 
-	FUNCTION TokenType = 13
-	TRUE     TokenType = 20
-	FALSE    TokenType = 21
-	IF       TokenType = 22
-	ELSE     TokenType = 23
-	RETURN   TokenType = 24
+	FUNCTION
+	TRUE
+	FALSE
+	IF
+	ELSE
+	RETURN
 
-	NewLine TokenType = 27
+	NewLine
 )
 
 var TokenTypeString = map[TokenType]string{
