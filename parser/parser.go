@@ -54,6 +54,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerInfix(token.GREATER_THAN, p.parseInfixExpression)
 	p.registerPrefix(token.TRUE, p.parseBoolean)
 	p.registerPrefix(token.FALSE, p.parseBoolean)
+	p.registerPrefix(token.LPAREN, p.parseGroupedExpression)
 
 	return p
 }
@@ -116,7 +117,7 @@ func (p *Parser) curTokenIs(t token.TokenType) bool {
 }
 
 func (p *Parser) peekTokenIs(t token.TokenType) bool {
-	return p.curToken.Type == t
+	return p.peekToken.Type == t
 }
 
 func (p *Parser) expectPeek(t token.TokenType) bool {
@@ -269,4 +270,16 @@ func (p *Parser) parseBoolean() ast.Expression {
 		Token: p.curToken,
 		Value: p.curTokenIs(token.TRUE),
 	}
+}
+
+func (p *Parser) parseGroupedExpression() ast.Expression {
+	p.nextToken()
+	fmt.Println("parsing grouped expression")
+
+	exp := p.parseExpression(LOWEST)
+	if !p.expectPeek(token.RPAREN) {
+		return nil
+	}
+
+	return exp
 }

@@ -285,6 +285,8 @@ func TestOperatorPrecedenceParsing(t *testing.T) {
 		{"false", "false"},
 		{"3 > 5 == false", "((3 > 5) == false)"},
 		{"3 < 5 == true", "((3 < 5) == true)"},
+		{"1 + (2 + 3) + 4", "((1 + (2 + 3)) + 4)"},
+		{"!(true == true)", "(!(true == true))"},
 	}
 	for _, test := range tests {
 		l := lexer.New(test.input)
