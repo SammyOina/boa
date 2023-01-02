@@ -10,33 +10,34 @@ import (
 )
 
 func TestAssignStatements(t *testing.T) {
-	input := `
-	x = 5
-	y = 3
-	`
-	l := lexer.New(input)
-	p := New(l)
-
-	program := p.ParseProgram()
-	checkParserErrors(t, p)
-	if program == nil {
-		t.Fatal("Parse returned nil")
-	}
-
-	if len(program.Statements) != 2 {
-		t.Fatalf("wanted 2 statements got %d", len(program.Statements))
-	}
-
 	tests := []struct {
+		input              string
 		expectedIdentifier string
+		expectedValue      interface{}
 	}{
-		{"x"},
-		{"y"},
+		{"x = 5", "x", 5},
+		{"y = true", "y", true},
+		{"x = y", "x", "y"},
 	}
 
-	for i, tt := range tests {
-		stmt := program.Statements[i]
-		if !testAssignStatement(t, stmt, tt.expectedIdentifier) {
+	for i, test := range tests {
+		fmt.Println("test", i)
+		l := lexer.New(test.input)
+		p := New(l)
+
+		program := p.ParseProgram()
+		checkParserErrors(t, p)
+
+		if len(program.Statements) != 1 {
+			t.Fatalf("wanted 1 statements got %d", len(program.Statements))
+		}
+
+		stmt := program.Statements[0]
+		if !testAssignStatement(t, stmt, test.expectedIdentifier) {
+			return
+		}
+		val := stmt.(*ast.AssignStatement).Value
+		if !testLiteralExpression(t, val, test.expectedValue) {
 			return
 		}
 	}
@@ -73,9 +74,8 @@ func checkParserErrors(t *testing.T, p *Parser) {
 }
 
 func TestReturnStatements(t *testing.T) {
-	input := `
-	return 5
-	return 11001
+	input := `return 5
+	return false
 	`
 	l := lexer.New(input)
 	p := New(l)
@@ -85,6 +85,13 @@ func TestReturnStatements(t *testing.T) {
 
 	if len(program.Statements) != 2 {
 		t.Fatalf("Required 2 program statements, got %d", len(program.Statements))
+	}
+
+	if !testLiteralExpression(t, program.Statements[0].(*ast.ReturnStatement).ReturnValue, 5) {
+		return
+	}
+	if !testLiteralExpression(t, program.Statements[1].(*ast.ReturnStatement).ReturnValue, false) {
+		return
 	}
 
 	for _, stmt := range program.Statements {

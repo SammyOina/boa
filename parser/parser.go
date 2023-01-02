@@ -101,15 +101,18 @@ func (p *Parser) parseStatement() ast.Statement {
 
 func (p *Parser) parseAssignStatement() *ast.AssignStatement {
 	stmt := &ast.AssignStatement{Token: p.curToken}
-	if !p.expectPeek(token.IDENTIFIER) {
+	/*if !p.expectPeek(token.IDENTIFIER) {
 		return nil
-	}
+	}*/
 	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
 
 	if !p.expectPeek(token.ASSIGN) {
 		return nil
 	}
-	for !p.curTokenIs(token.NewLine) {
+	p.nextToken()
+	stmt.Value = p.parseExpression(LOWEST)
+
+	if p.peekTokenIs(token.NewLine) {
 		p.nextToken()
 	}
 	return stmt
@@ -142,7 +145,9 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 	stmt := &ast.ReturnStatement{Token: p.curToken}
 	p.nextToken()
 
-	for !p.curTokenIs(token.NewLine) {
+	stmt.ReturnValue = p.parseExpression(LOWEST)
+
+	if p.peekTokenIs(token.NewLine) {
 		p.nextToken()
 	}
 	return stmt
