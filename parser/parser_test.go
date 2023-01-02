@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/sammyoina/boa/ast"
@@ -287,6 +288,8 @@ func TestOperatorPrecedenceParsing(t *testing.T) {
 		{"3 < 5 == true", "((3 < 5) == true)"},
 		{"1 + (2 + 3) + 4", "((1 + (2 + 3)) + 4)"},
 		{"!(true == true)", "(!(true == true))"},
+		{"a + add(b * c) + d", "((a + add((b * c))) + d)"},
+		{"add(a, add(5, 6))", "add(a, add(5, 6))"},
 	}
 	for _, test := range tests {
 		l := lexer.New(test.input)
@@ -447,4 +450,34 @@ func TestFunctionLiteralParsing(t *testing.T) {
 		t.Fatalf("function body is not expression statement, got %T", function.Body.Statements[0])
 	}
 	testInfixExpression(t, bodyStmt.Expression, "x", "+", "y")
+}
+
+func TestCallExpressionParsing(t *testing.T) {
+	input := "add(1, 2 * 3)"
+	l := lexer.New(input)
+	p := New(l)
+	program := p.ParseProgram()
+	checkParserErrors(t, p)
+
+	if len(program.Statements) != 1 {
+		t.Fatalf("wanted 1 program statements, got %d", len(program.Statements))
+	}
+	stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+	if !ok {
+		t.Errorf("stmt is not expression statement, got %T", program.Statements[0])
+	}
+	exp, ok := stmt.Expression.(*ast.CallExpression)
+	if !ok {
+		t.Fatalf("expression not call expression, got %T", stmt.Expression)
+	}
+	if !testIdentifier(t, exp.Function, "add") {
+		return
+	}
+
+	if len(exp.Arguments) != len(strings.Split(input, ",")) {
+		t.Fatalf("wrong length of arguments, got %d", len(strings.Split(input, ",")))
+	}
+
+	testLiteralExpression(t, exp.Arguments[0], 1)
+	testInfixExpression(t, exp.Arguments[1], 2, "*", 3)
 }
