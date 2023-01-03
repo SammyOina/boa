@@ -9,12 +9,14 @@ const (
 	INTEGER
 	BOOLEAN
 	NULL
+	RETURN
 )
 
 var ObjectString = map[ObjectType]string{
 	INTEGER: "integer",
 	BOOLEAN: "bool",
 	NULL:    "null",
+	RETURN:  "return",
 }
 
 type Object interface {
@@ -54,4 +56,16 @@ func (n *Null) Type() ObjectType {
 
 func (n *Null) Inspect() string {
 	return "null"
+}
+
+type Return struct {
+	Value Object
+}
+
+func (r *Return) Type() ObjectType {
+	return RETURN
+}
+
+func (r *Return) Inspect() string {
+	return r.Value.Inspect()
 }
