@@ -10,6 +10,7 @@ const (
 	BOOLEAN
 	NULL
 	RETURN
+	ERROR
 )
 
 var ObjectString = map[ObjectType]string{
@@ -68,4 +69,35 @@ func (r *Return) Type() ObjectType {
 
 func (r *Return) Inspect() string {
 	return r.Value.Inspect()
+}
+
+type Error struct {
+	Message string
+}
+
+func (e *Error) Type() ObjectType {
+	return ERROR
+}
+
+func (e *Error) Inspect() string {
+	return "ERROR: " + e.Message
+}
+
+func NewEnv() *Environment {
+	s := make(map[string]Object)
+	return &Environment{store: s}
+}
+
+type Environment struct {
+	store map[string]Object
+}
+
+func (e *Environment) Get(name string) (Object, bool) {
+	obj, ok := e.store[name]
+	return obj, ok
+}
+
+func (e *Environment) Set(name string, val Object) Object {
+	e.store[name] = val
+	return val
 }
