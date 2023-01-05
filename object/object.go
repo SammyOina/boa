@@ -18,6 +18,7 @@ const (
 	RETURN
 	ERROR
 	FUNCTION
+	STRING
 )
 
 var ObjectString = map[ObjectType]string{
@@ -27,6 +28,7 @@ var ObjectString = map[ObjectType]string{
 	RETURN:   "return",
 	ERROR:    "error",
 	FUNCTION: "function",
+	STRING:   "STRING",
 }
 
 type Object interface {
@@ -146,4 +148,16 @@ func NewEnclosedEnvironment(outer *Environment) *Environment {
 	env := NewEnv()
 	env.outer = outer
 	return env
+}
+
+type String struct {
+	Value string
+}
+
+func (s *String) Type() ObjectType {
+	return STRING
+}
+
+func (s *String) Inspect() string {
+	return s.Value
 }

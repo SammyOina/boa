@@ -35,7 +35,7 @@ func (l *Lexer) NextToken() token.Token {
 	l.skipWhitespace()
 
 	switch l.ch {
-	case '=':
+	case token.TokenTypeByte[token.ASSIGN]:
 		if l.peekChar() == '=' {
 			//ch := l.ch
 			l.readChar()
@@ -43,38 +43,41 @@ func (l *Lexer) NextToken() token.Token {
 		} else {
 			tok = newToken(token.ASSIGN, l.ch)
 		}
-	case '(':
+	case token.TokenTypeByte[token.LPAREN]:
 		tok = newToken(token.LPAREN, l.ch)
-	case ')':
+	case token.TokenTypeByte[token.RPAREN]:
 		tok = newToken(token.RPAREN, l.ch)
-	case ',':
+	case token.TokenTypeByte[token.COMMA]:
 		tok = newToken(token.COMMA, l.ch)
-	case '+':
+	case token.TokenTypeByte[token.PLUS]:
 		tok = newToken(token.PLUS, l.ch)
-	case '{':
+	case token.TokenTypeByte[token.LBRACE]:
 		tok = newToken(token.LBRACE, l.ch)
-	case '}':
+	case token.TokenTypeByte[token.RBRACE]:
 		tok = newToken(token.RBRACE, l.ch)
-	case '-':
+	case token.TokenTypeByte[token.MINUS]:
 		tok = newToken(token.MINUS, l.ch)
-	case '!':
+	case token.TokenTypeByte[token.BANG]:
 		if l.peekChar() == '=' {
 			l.readChar()
 			tok = token.Token{Type: token.NOT_EQUAL_TO, Literal: "!="}
 		} else {
 			tok = newToken(token.BANG, l.ch)
 		}
-	case '<':
+	case token.TokenTypeByte[token.LESS_THAN]:
 		tok = newToken(token.LESS_THAN, l.ch)
-	case '>':
+	case token.TokenTypeByte[token.GREATER_THAN]:
 		tok = newToken(token.GREATER_THAN, l.ch)
-	case '*':
+	case token.TokenTypeByte[token.ASTERISK]:
 		tok = newToken(token.ASTERISK, l.ch)
-	case '/':
+	case token.TokenTypeByte[token.SLASH]:
 		tok = newToken(token.SLASH, l.ch)
-	case '\n':
+	case token.TokenTypeByte[token.NewLine]:
 		tok = newToken(token.NewLine, l.ch)
-	case 0:
+	case token.TokenTypeByte[token.STRING]:
+		tok.Type = token.STRING
+		tok.Literal = l.readString()
+	case token.TokenTypeByte[token.EOF]:
 		tok.Literal = ""
 		tok.Type = token.EOF
 	default:
@@ -130,4 +133,15 @@ func (l *Lexer) peekChar() byte {
 	} else {
 		return l.input[l.readPosition]
 	}
+}
+
+func (l *Lexer) readString() string {
+	pos := l.position + 1
+	for {
+		l.readChar()
+		if l.ch == '"' || l.ch == 0 {
+			break
+		}
+	}
+	return l.input[pos:l.position]
 }

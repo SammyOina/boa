@@ -8,8 +8,9 @@ const (
 	EOF
 
 	IDENTIFIER
-	VAR_TYPE
+	//VAR_TYPE
 	INT
+	STRING
 
 	ASSIGN
 	PLUS
@@ -40,10 +41,10 @@ const (
 )
 
 var TokenTypeString = map[TokenType]string{
-	ILLEGAL:      "illegal",
-	EOF:          "EOF",
-	IDENTIFIER:   "IDENTIFIER",
-	VAR_TYPE:     "VAR_TYPE",
+	ILLEGAL:    "illegal",
+	EOF:        "EOF",
+	IDENTIFIER: "IDENTIFIER",
+	//VAR_TYPE:     "VAR_TYPE",
 	INT:          "Integer",
 	ASSIGN:       "=",
 	PLUS:         "+",
@@ -67,6 +68,26 @@ var TokenTypeString = map[TokenType]string{
 	ELSE:         "ELSE",
 	RETURN:       "RETURN",
 	NewLine:      "NewLine",
+	STRING:       "\"",
+}
+
+var TokenTypeByte = map[TokenType]byte{
+	ASSIGN:       '=',
+	PLUS:         '+',
+	MINUS:        '-',
+	BANG:         '!',
+	ASTERISK:     '*',
+	SLASH:        '/',
+	LESS_THAN:    '<',
+	GREATER_THAN: '>',
+	COMMA:        ',',
+	LPAREN:       '(',
+	RPAREN:       ')',
+	LBRACE:       '{',
+	RBRACE:       '}',
+	NewLine:      '\n',
+	STRING:       '"',
+	EOF:          0,
 }
 
 type Token struct {
