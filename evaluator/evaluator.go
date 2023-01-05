@@ -118,8 +118,18 @@ func evalBangOperatorExpression(right object.Object) object.Object {
 	case NULL:
 		return TRUE
 	default:
+		switch right.Type() {
+		case object.BOOLEAN:
+			boolean := right.(*object.Boolean).Value
+			if boolean {
+				return TRUE
+			} else {
+				return FALSE
+			}
+		}
 		return FALSE
 	}
+
 }
 
 func evalMinusPrefixOperatorExpression(right object.Object) object.Object {
@@ -195,9 +205,15 @@ func isTruthy(obj object.Object) bool {
 	case FALSE:
 		return false
 	default:
-
-		fmt.Println("eval default")
-		fmt.Println(obj)
+		switch obj.Type() {
+		case object.BOOLEAN:
+			boolean := obj.(*object.Boolean).Value
+			if boolean {
+				return true
+			} else {
+				return false
+			}
+		}
 		return true
 	}
 }
