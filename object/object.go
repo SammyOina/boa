@@ -19,6 +19,7 @@ const (
 	ERROR
 	FUNCTION
 	STRING
+	BUILT_IN
 )
 
 var ObjectString = map[ObjectType]string{
@@ -28,7 +29,8 @@ var ObjectString = map[ObjectType]string{
 	RETURN:   "return",
 	ERROR:    "error",
 	FUNCTION: "function",
-	STRING:   "STRING",
+	STRING:   "String",
+	BUILT_IN: "Built_in",
 }
 
 type Object interface {
@@ -160,4 +162,18 @@ func (s *String) Type() ObjectType {
 
 func (s *String) Inspect() string {
 	return s.Value
+}
+
+type BuiltInFunction func(args ...Object) Object
+
+type BuiltIn struct {
+	Fn BuiltInFunction
+}
+
+func (b *BuiltIn) Type() ObjectType {
+	return BUILT_IN
+}
+
+func (b *BuiltIn) Inspect() string {
+	return "builtin function"
 }
