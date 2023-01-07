@@ -80,6 +80,12 @@ func (l *Lexer) NextToken() token.Token {
 	case token.TokenTypeByte[token.EOF]:
 		tok.Literal = ""
 		tok.Type = token.EOF
+	case token.TokenTypeByte[token.LBRACKET]:
+		tok = newToken(token.LBRACKET, l.ch)
+	case token.TokenTypeByte[token.RBRACKET]:
+		tok = newToken(token.RBRACKET, l.ch)
+	case token.TokenTypeByte[token.COLON]:
+		tok = newToken(token.COLON, l.ch)
 	default:
 		if isLetter(l.ch) {
 			tok.Literal = l.readIdentifier()

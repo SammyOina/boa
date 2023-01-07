@@ -29,6 +29,9 @@ const (
 	RPAREN
 	LBRACE
 	RBRACE
+	LBRACKET
+	RBRACKET
+	COLON
 
 	FUNCTION
 	TRUE
@@ -61,6 +64,8 @@ var TokenTypeString = map[TokenType]string{
 	RPAREN:       ")",
 	LBRACE:       "{",
 	RBRACE:       "}",
+	LBRACKET:     "[",
+	RBRACKET:     "]",
 	FUNCTION:     "FUNCTION",
 	TRUE:         "TRUE",
 	FALSE:        "FALSE",
@@ -69,6 +74,7 @@ var TokenTypeString = map[TokenType]string{
 	RETURN:       "RETURN",
 	NewLine:      "NewLine",
 	STRING:       "\"",
+	COLON:        ":",
 }
 
 var TokenTypeByte = map[TokenType]byte{
@@ -87,7 +93,10 @@ var TokenTypeByte = map[TokenType]byte{
 	RBRACE:       '}',
 	NewLine:      '\n',
 	STRING:       '"',
+	LBRACKET:     '[',
+	RBRACKET:     ']',
 	EOF:          0,
+	COLON:        ':',
 }
 
 type Token struct {

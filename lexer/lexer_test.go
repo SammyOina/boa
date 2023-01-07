@@ -12,9 +12,10 @@ func TestNextToken(t *testing.T) {
 	b  = 6
 	def test(x,y) {
 		return x + y
-		}
-		res = test(a,b)
-		`
+	}
+	res = test(a,b)
+	{"foo":"bar"}
+	`
 	tests := []struct {
 		expectedType    token.TokenType
 		expectedLiteral string
@@ -51,6 +52,12 @@ func TestNextToken(t *testing.T) {
 		{token.COMMA, ","},
 		{token.IDENTIFIER, "b"},
 		{token.RPAREN, ")"},
+		{token.NewLine, "\n"},
+		{token.LBRACE, "{"},
+		{token.STRING, "foo"},
+		{token.COLON, ":"},
+		{token.STRING, "bar"},
+		{token.RBRACE, "}"},
 		{token.NewLine, "\n"},
 		{token.EOF, ""},
 	}
