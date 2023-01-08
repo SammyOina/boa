@@ -61,7 +61,6 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 			Body:       node.Body,
 			Name:       node.Name.Token.Literal,
 		}
-		fmt.Println(node.Name.Token.Literal)
 		env.Set(node.Name.Token.Literal, fn)
 		return fn
 	case *ast.CallExpression:
@@ -221,7 +220,6 @@ func isTruthy(obj object.Object) bool {
 	case NULL:
 		return false
 	case TRUE:
-		fmt.Println("eval true")
 		return true
 	case FALSE:
 		return false
@@ -432,7 +430,7 @@ var builtIns = map[string]*object.BuiltIn{
 			for _, arg := range args {
 				fmt.Println(arg.Inspect())
 			}
-			return NULL
+			return nil
 		},
 	},
 }

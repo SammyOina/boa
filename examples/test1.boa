@@ -1,4 +1,19 @@
 x = 15
-def double(x) { return x * 2}
+def double(x) {
+    return x * 2
+}
 y = double(x)
-print(y)
+if (y != 30) {
+    print("wrong evaluation")
+} else {
+    print(y)
+}
+person = {"name": "sammy", "age": 23, "human": true}
+print(person["name"])
+seq = [1,1,2,3,5,8,13]
+zz = append(seq, 21)
+print(zz[7])
+if (last(zz) != zz[len(zz) - 1]) {
+    print("not appended")
+}
+print(first(zz))
